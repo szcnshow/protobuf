@@ -3,11 +3,11 @@ namespace FlatBuffers
     public static class FlatBufferHelper
     {
         /// <summary>
-        /// 添加数组
+        /// Build vector from c# array
         /// </summary>
-        /// <typeparam name="T">数组类型</typeparam>
-        /// <param name="builder">构造类</param>
-        /// <param name="datas">数组数据</param>
+        /// <typeparam name="T">type</typeparam>
+        /// <param name="builder">flatBufferBuilder instance</param>
+        /// <param name="datas">c# array</param>
         /// <returns></returns>
         public static VectorOffset BuildVector<T>(this FlatBufferBuilder builder, T[] datas) where T : struct
         {
@@ -18,7 +18,7 @@ namespace FlatBuffers
         }
 
         /// <summary>
-        /// 创建字符串对象
+        /// Build string
         /// </summary>
         /// <param name="builder"></param>
         /// <param name="data"></param>
@@ -29,20 +29,21 @@ namespace FlatBuffers
         }
 
         /// <summary>
-        /// 解码数组
+        /// Decode vector to c# array
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="data"></param>
-        /// <param name="fieldName">字段名称</param>
+        /// <param name="fieldName"> C# class property's name</param>
         /// <returns></returns>
         public static T[] DecodeVector<T>(this FlatPLsModelData data, string fieldName)
         {
-            //数组长度
+            //get the vector length
             var prop = typeof(FlatPLsModelData).GetProperty(fieldName + "Length");
             int len = (int)prop.GetValue(data);
             if (len == 0)
                 return null;
 
+            //get the vector access method
             var method = typeof(FlatPLsModelData).GetMethod(fieldName);
 
             T[] retData = new T[len];
